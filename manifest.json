@@ -1,0 +1,23 @@
+{
+  "name": "Event Stock list",
+  "short_name": "Event Stock",
+  "description": "ระบบเช็ค เติม ส่ง คืน & สรุปผู้แทน",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#1d4ed8",
+  "theme_color": "#1d4ed8",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
