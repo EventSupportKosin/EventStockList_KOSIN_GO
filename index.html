@@ -33,11 +33,19 @@
           <p class="text-xs text-blue-200">ระบบเช็ค เติม ส่ง คืน & สรุปผู้แทน</p>
         </div>
       </div>
-      <button onclick="loadData(true)" id="refreshBtn" title="รีเฟรชข้อมูล" class="p-2 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 transition">
-        <svg id="refreshIcon" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-        </svg>
-      </button>
+      <div class="flex items-center space-x-2">
+        <button type="button" onclick="openBuyListModal()" id="buyListHeaderBtn" title="List ของที่ต้องการเบิกเพิ่ม / ต้องซื้อเข้าแผนก"
+                class="relative px-2.5 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs shadow-sm active:scale-95 transition flex items-center space-x-1">
+          <span>📝</span>
+          <span>ต้องซื้อเพิ่ม</span>
+          <span id="buyListBadge" class="hidden ml-0.5 px-1.5 py-0.2 rounded-full bg-rose-600 text-white text-[10px] font-black leading-tight shadow-xs">0</span>
+        </button>
+        <button onclick="loadData(true)" id="refreshBtn" title="รีเฟรชข้อมูล" class="p-2 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 transition">
+          <svg id="refreshIcon" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+          </svg>
+        </button>
+      </div>
     </div>
     <div class="max-w-md mx-auto px-4 pb-2.5 flex items-center justify-between text-xs text-blue-100 border-t border-blue-600/50 pt-2">
       <div class="flex items-center space-x-1.5">
@@ -1064,6 +1072,45 @@
     </div>
   </div>
 
+  <!-- BUY LIST MODAL (List เตือนของที่ต้องซื้อ / เบิกเพิ่มเข้าแผนก) -->
+  <div id="buyListModal" class="fixed inset-0 bg-black/60 z-[70] hidden items-end sm:items-center justify-center sm:p-4 backdrop-blur-sm" onclick="closeBuyListModal()">
+    <div class="relative w-full sm:max-w-md bg-white rounded-t-3xl sm:rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[88vh]" onclick="event.stopPropagation()">
+      <div class="p-4 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 flex justify-between items-center flex-shrink-0">
+        <div>
+          <h3 class="text-sm font-black flex items-center space-x-1.5">
+            <span>📝</span>
+            <span>List ของที่ต้องซื้อ / เบิกเพิ่มเข้าแผนก</span>
+          </h3>
+          <p class="text-[11px] text-amber-950/80 font-medium mt-0.5">จดบันทึกข้อความเตือนว่าต้องซื้ออะไรเข้าแผนกบ้าง</p>
+        </div>
+        <button type="button" onclick="closeBuyListModal()" class="text-slate-900/70 hover:text-slate-950 p-1.5 rounded-full hover:bg-white/20 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <form onsubmit="handleAddBuyListSubmit(event)" class="p-3 bg-amber-50/70 border-b border-amber-200 flex space-x-2 flex-shrink-0">
+        <input type="text" id="buyListInput" placeholder="พิมพ์รายการที่ต้องซื้อ/เบิกเพิ่ม..." required
+               class="flex-1 px-3 py-2 text-xs rounded-xl border border-amber-300 bg-white focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-xs">
+        <button type="submit" id="buyListAddBtn" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-sm active:scale-95 transition flex-shrink-0">
+          + เพิ่ม
+        </button>
+      </form>
+
+      <div id="buyListContainer" class="p-3 overflow-y-auto custom-scroll space-y-2 flex-1 bg-slate-50 min-h-[180px]">
+        <!-- Dynamically rendered -->
+      </div>
+
+      <div class="p-3 bg-white border-t border-slate-200 flex items-center justify-between space-x-2 flex-shrink-0">
+        <button type="button" onclick="copyBuyListSummary()" class="flex-1 py-2 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-700 font-bold text-xs border border-emerald-200 transition active:scale-95 flex items-center justify-center space-x-1">
+          <span>📋</span><span>คัดลอก List ส่ง LINE</span>
+        </button>
+        <button type="button" onclick="closeBuyListModal()" class="py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition">
+          ปิด
+        </button>
+      </div>
+    </div>
+  </div>
+
 <!-- TOAST -->
   <div id="toast" class="fixed top-4 left-1/2 -translate-x-1/2 max-w-xs w-full bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center space-x-3 transition-all duration-300 transform -translate-y-20 opacity-0 z-50 pointer-events-none">
     <span id="toastIcon" class="text-xl">✅</span>
@@ -1102,6 +1149,7 @@
       activeAddMoreBatch: null,
       addMoreRowCounter: 0,
       closedBatches: {},
+      buyList: [],
       editImageBase64: null,
       editImageType: null,
       selectedImageBase64: null,
@@ -1158,7 +1206,7 @@
       var methods = [
         'getInitialData', 'addNewItem', 'updateItemTag', 'updateItemDetails',
         'restockExistingItem', 'saveRepPhoto', 'withdrawBatch', 'returnBatch',
-        'closeJobBatch', 'reopenJobBatch', 'generateMatrixPdf'
+        'closeJobBatch', 'reopenJobBatch', 'generateMatrixPdf', 'addBuyListItem', 'toggleBuyListItem', 'deleteBuyListItem'
       ];
 
       methods.forEach(function (methodName) {
@@ -1676,6 +1724,8 @@
               appState.transactions = res.transactions || [];
               appState.repsPhotos = res.repsPhotos || {};
               appState.closedBatches = res.closedBatches || {};
+              appState.buyList = res.buyList || [];
+              updateBuyListBadge();
               updatePendingBadge();
               updateStats(res.totalItems, res.totalUnits);
               renderStockCards();
@@ -5000,6 +5050,182 @@
       if (val < min) val = min;
       if (!isNaN(max) && val > max) val = max;
       input.value = val;
+    }
+
+    
+    // ==================== BUY LIST REMINDER FUNCTIONS (List ของที่ต้องซื้อเข้าแผนก) ====================
+    function updateBuyListBadge() {
+      var list = appState.buyList || [];
+      var pendingCount = list.filter(function (it) { return it.status !== 'done'; }).length;
+      var badge = document.getElementById('buyListBadge');
+      if (badge) {
+        if (pendingCount > 0) {
+          badge.innerText = pendingCount;
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+      }
+    }
+
+    function openBuyListModal() {
+      renderBuyList();
+      var modal = document.getElementById('buyListModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      setTimeout(function () {
+        var inp = document.getElementById('buyListInput');
+        if (inp) inp.focus();
+      }, 100);
+    }
+
+    function closeBuyListModal() {
+      var modal = document.getElementById('buyListModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function renderBuyList() {
+      updateBuyListBadge();
+      var container = document.getElementById('buyListContainer');
+      if (!container) return;
+
+      var list = (appState.buyList || []).slice();
+      // Sort pending first, then done
+      list.sort(function (a, b) {
+        if ((a.status === 'done') !== (b.status === 'done')) {
+          return a.status === 'done' ? 1 : -1;
+        }
+        return 0;
+      });
+
+      if (list.length === 0) {
+        container.innerHTML =
+          '<div class="text-center py-8 bg-white rounded-xl border border-slate-200">' +
+            '<span class="text-3xl block mb-1.5">📝</span>' +
+            '<p class="text-xs font-semibold text-slate-600">ยังไม่มีรายการที่ต้องซื้อ/เบิกเพิ่ม</p>' +
+            '<p class="text-[11px] text-slate-400 mt-0.5">พิมพ์ข้อความด้านบนเพื่อจดเตือนไว้ได้เลย</p>' +
+          '</div>';
+        return;
+      }
+
+      container.innerHTML = list.map(function (it) {
+        var isDone = (it.status === 'done');
+        return '' +
+          '<div class="p-2.5 rounded-xl border flex items-center space-x-2.5 transition ' + (isDone ? 'bg-slate-100 border-slate-200 opacity-65' : 'bg-white border-amber-200 shadow-xs') + '">' +
+            '<button type="button" data-buy-toggle="' + esc(it.id) + '" class="w-6 h-6 rounded-lg border flex items-center justify-center flex-shrink-0 transition ' + (isDone ? 'bg-emerald-500 border-emerald-600 text-white' : 'bg-white border-slate-300 hover:border-emerald-500 text-transparent') + '" title="' + (isDone ? 'ทำเครื่องหมายว่ายังไม่ได้ซื้อ' : 'ทำเครื่องหมายว่าซื้อแล้ว') + '">' +
+              '<span class="text-xs font-bold">✓</span>' +
+            '</button>' +
+            '<div class="flex-1 min-w-0">' +
+              '<p class="text-xs font-semibold break-words ' + (isDone ? 'line-through text-slate-400' : 'text-slate-800') + '">' + esc(it.text) + '</p>' +
+              '<p class="text-[10px] text-slate-400 mt-0.5">จดเมื่อ: ' + esc(it.createdAt || '-') + '</p>' +
+            '</div>' +
+            '<button type="button" data-buy-del="' + esc(it.id) + '" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition flex-shrink-0" title="ลบรายการ">' +
+              '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>' +
+            '</button>' +
+          '</div>';
+      }).join('');
+    }
+
+    function handleAddBuyListSubmit(event) {
+      event.preventDefault();
+      var input = document.getElementById('buyListInput');
+      var text = input ? input.value.trim() : '';
+      if (!text) return;
+
+      var btn = document.getElementById('buyListAddBtn');
+      if (btn) { btn.disabled = true; btn.innerText = '...'; }
+
+      if (hasGas()) {
+        google.script.run
+          .withSuccessHandler(function (res) {
+            if (btn) { btn.disabled = false; btn.innerText = '+ เพิ่ม'; }
+            if (res && res.success && res.item) {
+              if (!appState.buyList) appState.buyList = [];
+              appState.buyList.unshift(res.item);
+              if (input) input.value = '';
+              renderBuyList();
+              showToast('เพิ่มรายการเตือนแล้ว', '📝');
+            } else {
+              showToast((res && res.error) || 'เพิ่มรายการไม่สำเร็จ', '❌');
+            }
+          })
+          .withFailureHandler(function (err) {
+            if (btn) { btn.disabled = false; btn.innerText = '+ เพิ่ม'; }
+            showToast('เกิดข้อผิดพลาด: ' + (err && err.message ? err.message : err), '❌');
+          })
+          .addBuyListItem({ text: text });
+      } else {
+        if (btn) { btn.disabled = false; btn.innerText = '+ เพิ่ม'; }
+        if (!appState.buyList) appState.buyList = [];
+        appState.buyList.unshift({ id: 'BUY-' + Date.now(), text: text, status: 'pending', createdAt: todayLocal() });
+        if (input) input.value = '';
+        renderBuyList();
+        showToast('เพิ่มรายการเตือนแล้ว', '📝');
+      }
+    }
+
+    function toggleBuyListItemAction(id) {
+      var item = (appState.buyList || []).find(function (x) { return x.id === id; });
+      if (!item) return;
+      item.status = (item.status === 'done') ? 'pending' : 'done';
+      renderBuyList();
+
+      if (hasGas()) {
+        google.script.run
+          .withSuccessHandler(function (res) {
+            if (res && res.success) {
+              item.status = res.status;
+              renderBuyList();
+            }
+          })
+          .withFailureHandler(function () {
+            showToast('อัปเดตสถานะไม่สำเร็จ', '⚠️');
+          })
+          .toggleBuyListItem({ id: id });
+      }
+    }
+
+    function deleteBuyListItemAction(id) {
+      appState.buyList = (appState.buyList || []).filter(function (x) { return x.id !== id; });
+      renderBuyList();
+
+      if (hasGas()) {
+        google.script.run
+          .withSuccessHandler(function (res) {
+            if (res && res.success) showToast('ลบรายการแล้ว', '🗑️');
+          })
+          .withFailureHandler(function () {
+            showToast('ลบรายการไม่สำเร็จ', '⚠️');
+          })
+          .deleteBuyListItem({ id: id });
+      }
+    }
+
+    function copyBuyListSummary() {
+      var pending = (appState.buyList || []).filter(function (it) { return it.status !== 'done'; });
+      if (pending.length === 0) {
+        showToast('ไม่มีรายการค้างซื้อสำหรับคัดลอก', '⚠️');
+        return;
+      }
+      var NL = String.fromCharCode(10);
+      var msg = '📝 รายการของที่ต้องซื้อ / เบิกเพิ่มเข้าแผนก' + NL + '--------------------------------' + NL;
+      pending.forEach(function (it, idx) {
+        msg += (idx + 1) + '. ' + it.text + NL;
+      });
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(msg).then(function () {
+          showToast('คัดลอก List ส่ง LINE แล้ว', '📋');
+        }).catch(function () {
+          fallbackCopyText(msg);
+        });
+      } else {
+        fallbackCopyText(msg);
+      }
     }
 
     function openImageModal(url, title, qty, itemId) {
